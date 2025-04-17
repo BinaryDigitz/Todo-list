@@ -6,12 +6,12 @@ import AddTask from "./pages/AddTask";
 
 function App() {
   return (
-    <div className="bg-gradient-to-b from-blue-50 to-purple-100">
+    <div className="bg-gradient-to-b from-red-50 to-purple-100 ">
       <header>
         <Navbar />
       </header>
       <ToastContainer />
-      <main className="min-h-[70vh]">
+      <main className="min-h-[100vh] px-14">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/add-task" element={<AddTask/>} />
