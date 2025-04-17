@@ -1,6 +1,8 @@
 
 // pages
-
+export { default as MyTasks } from '../pages/MyTasks'
+export { default as AddTasks } from '../pages/AddTask'
+export { default as Profile } from '../pages/Profile'
 export { default as Home } from '../pages/Home'
 
 
