@@ -4,6 +4,12 @@ import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import AddTask from "./pages/AddTask";
 
+// ADD TASK : /api/tasks/add
+// GET TASKS: /api/tasks/list
+// GET TASK: /api/tasks/lists/taskId
+// SIGN UP : /api/auth/sign-up
+// SIGN IN: /api/auth/sign-in
+
 function App() {
   return (
     <div className="bg-gradient-to-b from-red-50 to-purple-100 ">

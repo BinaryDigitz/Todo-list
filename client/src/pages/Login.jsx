@@ -17,12 +17,17 @@ function Login() {
   const disableBTN = formData.email.length < 6 || formData.password.length < 6;
 
   function toggleFormState() {
+    clearForm()
     if (formState === "Login") {
       return setFormState("Sign Up");
     }
     return setFormState("Login");
   }
-
+function clearForm(){
+    return setFormData({
+        name:'', email:'', password:''
+    })
+}
   async function handlePostData(body, endpoint) {
     const { data } = await axios.post(baseUrl + endpoint, body);
     const { success, message, token, user } = data;
@@ -51,14 +56,16 @@ function Login() {
       }
       await handlePostData(formData, '/api/auth/sign-up')
       setLoading(false);
+      clearForm()
 
     } catch (ex) {
       setError(ex.message)
       setLoading(false)
+      clearForm()
     }
   }
   return (
-    <div className="grid place-items-center text-center">
+    <div className="grid place-items-center text-center mt-5">
       <div>
         {formState === "Login" ? (
           <h2 className="heading3 ">Welcome Back!</h2>

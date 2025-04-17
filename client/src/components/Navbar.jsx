@@ -4,7 +4,7 @@ import React from "react";
 function Navbar() {
   return (
     <div className="flex justify-around gap-2 items-center py-4 text-neutral-800">
-      <Link className="heading3 text-neutral-800" to="/">
+      <Link className="heading3 text-indigo-500" to="/">
         Todo-list
       </Link>
       <ul className="flex gap-4">
