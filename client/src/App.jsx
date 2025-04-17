@@ -1,5 +1,5 @@
 import React from "react";
-import { Home, Navbar, Footer, MyTasks, Profile } from "./components/exportComp";
+import { Home, Navbar, Footer, MyTasks, Profile, Login } from "./components/exportComp";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import AddTask from "./pages/AddTask";
@@ -17,6 +17,7 @@ function App() {
           <Route path="/add-task" element={<AddTask/>} />
           <Route path="/my-task" element={<MyTasks />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
       <footer>
