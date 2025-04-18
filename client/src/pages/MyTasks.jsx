@@ -1,22 +1,48 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AppContext from "../context/AppContext";
-import { useLocation } from "react-router-dom";
+import axios from 'axios'
+import { Error, Loading } from "../components/exportComp";
 
 function MyTasks() {
-  const { tasks, navigate, user } = useContext(AppContext);
- 
-  const { pathname } = useLocation();
+  const { tasks, baseUrl, navigate, setTasks } = useContext(AppContext);
+ const [ isLoading, setLoading ] = useState(false)
+ const [ error, setError ] = useState({ statusCode: '', message: ''})
 
-  useEffect(() => {
-    function protectPath() {
-      if (!user) {
-        navigate("/login");
+  
+
+  useEffect(() =>{
+    async function fetchTasks(){
+      setLoading(true)
+      
+      const token = localStorage.getItem('token')
+      try{
+        const { data } = await axios.get(baseUrl + '/api/tasks', { headers: { token : token}})
+        if(!data.success){
+          setLoading(false)
+          setError({statusCode: data.statusCode, message: data.message})
+          return
+        }
+        setError({ statusCode: '', message: ''})
+        setTasks(data.tasks)
+        setLoading(false)
+
+      }
+      catch(ex){
+        console.log(ex);
+        setLoading(false)
+        
       }
     }
-    protectPath();
-    return () => {};
-  }, [pathname === "/my-task"]);
-
+    fetchTasks()
+    return () =>{}
+  },[])
+ 
+  if(isLoading){
+    return <Loading />
+  }
+  if(error.message.length > 1){
+    return <Error error={error} />
+  }
   return (
     <div className="mt-5">
       <div className="text-center ">
@@ -34,17 +60,17 @@ function MyTasks() {
               <td className="p-4 ">SN</td>
               <td>TITLE</td>
               <td>START TIME</td>
-              <td>STATUS</td>
+              <td>COMPLETED</td>
             </tr>
           </thead>
           <tbody>
             {tasks &&
               tasks.map((task, index) => (
-                <tr key={task.id} className=" text-gray-700 text-sm hover:bg-green-50">
+                <tr key={index} className=" text-gray-700 text-sm hover:bg-green-50 border border-green-100">
                   <td>{index + 1 }</td>
                   <td>{task.title}</td>
-                  <td>{task.title}</td>
-                  <td>{task.title}</td>
+                  <td>{task.description}</td>
+                  <td>{task.complete ? 'Yes' : 'No'}</td>
                   <td onClick={() => navigate(`/my-task/${task.id}`)} className="text-green-500 cursor-pointer hover:bg-green-100">View </td>
                 </tr>
               ))}

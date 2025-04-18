@@ -21,6 +21,8 @@ function TasksForm() {
           { headers: {token}}
         )
         const { success, message, tasks } = data
+        console.log(data);
+        
        resetApp(message)
         if(success){
             setLoading(false)

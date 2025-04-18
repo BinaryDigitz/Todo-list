@@ -3,6 +3,8 @@ import { JWT_SECRET } from "../config/env.js";
 
 async function authUser(req, res, next) {
   const { token } = req.headers;
+
+ 
   if (!token)
     return res.json({
       success: false,
@@ -15,15 +17,16 @@ async function authUser(req, res, next) {
     
     if (!decodedToken)
       return res.json({
-        success: false,
-        message: "FORBIDDEN Login again",
-        statusCode: 403,
-      });
-    req.body.userId = decodedToken.id;
+    success: false,
+    message: "FORBIDDEN Login again",
+    statusCode: 403,
+  });
+ req.userId = decodedToken.id
+  
     next();
   } catch (ex) {
     next(ex);
   }
 }
 
-export default authUser
+export default authUser;

@@ -11,7 +11,7 @@ function AppProvider({ children }) {
   const [tasks, setTasks] = useState(null);
 
   function resetApp(message) {
-    if (message.includes('UNAUTHORIZED') || message.includes('FORBIDDEN')) {
+    if ( message && message.includes('UNAUTHORIZED') || message.includes('FORBIDDEN')) {
       localStorage.clear();
       setUser(null)
       navigate("/login");
