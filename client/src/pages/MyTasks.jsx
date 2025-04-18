@@ -1,9 +1,21 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import AppContext from "../context/AppContext";
+import { useLocation } from "react-router-dom";
 
 function MyTasks() {
-  const { tasks, navigate } = useContext(AppContext);
-  console.log(tasks);
+  const { tasks, navigate, user } = useContext(AppContext);
+ 
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    function protectPath() {
+      if (!user) {
+        navigate("/login");
+      }
+    }
+    protectPath();
+    return () => {};
+  }, [pathname === "/my-task"]);
 
   return (
     <div className="mt-5">

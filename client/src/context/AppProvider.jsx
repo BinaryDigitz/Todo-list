@@ -15,7 +15,7 @@ function AppProvider({ children}) {
       setUser(null)
       localStorage.removeItem('token')
       localStorage.removeItem('user')
-      setTimeout( navigate('/is-logged-in', 1000))
+      setTimeout( navigate('/login', 1000))
     }
     const values = {
         baseUrl,

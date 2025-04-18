@@ -2,7 +2,8 @@ import React, { useContext, useEffect } from "react";
 import AppContext from "../context/AppContext";
 import { useLocation} from "react-router-dom";
 
-function IsLoggedIn() {
+function IsLoggedIn({ path }) {
+   const { user } = useContext(AppContext)
   const { navigate, setToken } = useContext(AppContext);
   const { pathname } = useLocation();
 
@@ -13,10 +14,12 @@ function IsLoggedIn() {
         if (token) {
             setToken(token)
           navigate("/");
+          return
         }
-        else{
+        else if( !user){
             navigate('/login')
         }
+        navigate(path)
       }
     }
     handleAuth();
