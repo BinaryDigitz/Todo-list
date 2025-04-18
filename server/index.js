@@ -4,6 +4,7 @@ import cors from "cors";
 import { JWT_SECRET } from "./config/env.js";
 import connectDB from "./config/connectDB.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import userRouter from "./routes/auth.route.js";
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(
 app.get("/", (req, res) =>
   res.json({ success: true, message: "Hello World!", statusCode: 200 })
 );
+app.use('/api/users', userRouter)
 
 
 
