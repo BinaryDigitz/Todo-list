@@ -9,8 +9,8 @@ function IsLoggedIn({ path }) {
 
   useEffect(() => {
     function handleAuth() {
-      if (pathname === "/is-logged-in") {
-        const token = localStorage.getItem("token");
+      if (pathname === "/is-logged-in" || pathname === '/login') {
+        const token = localStorage.getItem("user");
         if (token) {
             setToken(token)
           navigate("/");

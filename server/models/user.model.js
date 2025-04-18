@@ -15,6 +15,7 @@ const userSchema = mongoose.Schema({
     unique:true,
     minLength: [3, "Email must be more than 3 chars long"],
     maxLength: 50,
+    lowercase: true
     // match: [/\S+@\.\S+/, "Please fill a valid email address"],
   },
   password: {
@@ -24,7 +25,13 @@ const userSchema = mongoose.Schema({
     maxLength: 250,
     
   },
-});
+  tasks: [
+    { type: mongoose.Schema.Types.ObjectId,
+      ref: 'Tasks'
+    }
+  ]
+}, { timestaps: true});
+
 userSchema.methods.generateToken = function () {
    return jwt.sign({ id: this._id }, JWT_SECRET, { expiresIn: "3d" });
 };

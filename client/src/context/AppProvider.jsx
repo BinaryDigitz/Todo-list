@@ -26,10 +26,15 @@ function AppProvider({ children}) {
         tasks, setTasks
 
     }
+   
+    
     useEffect(() =>{
       setTasks(todos)
       setToken(localStorage.getItem('token'))
-      setUser(localStorage.getItem('user'))
+      if(localStorage.getItem('user')){
+        setUser(JSON.parse(localStorage.getItem('user')))
+      }
+    
     },[])
   return (
     <AppContext.Provider value={values}>

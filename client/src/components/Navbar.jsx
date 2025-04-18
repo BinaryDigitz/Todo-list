@@ -3,12 +3,9 @@ import React, { useContext } from "react";
 import AppContext from "../context/AppContext";
 
 function Navbar() {
-  const { logout } = useContext(AppContext);
+  const { logout, user } = useContext(AppContext);
   const navigate = useNavigate();
-  const user = localStorage.getItem("user");
-  if (user) {
-    console.log(user);
-  }
+
 
   return (
     <div className="flex justify-between px-14 gap-2 items-center py-5 min-h-20 text-neutral-800 ">
@@ -30,8 +27,8 @@ function Navbar() {
       )}
       {user ? (
         <div className="group relative  cursor-pointer ">
-          <p className="bg-white shadow-sm rounded-full size-10 grid place-items-center ">
-            {"B"}
+          <p className="bg-black text-white shadow-sm rounded-full size-10 grid place-items-center ">
+            {user.name[0].toUpperCase() || 'U'}
           </p>
           <ul className="absolute hidden group-hover:block top-10 left-0 bg-white border border-gray-200 rounded-lg py-3 min-w-24 shadow-sm text-gray-700">
             <li className="hover:bg-slate-100 w-full px-2">Profile</li>

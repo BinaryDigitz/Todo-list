@@ -1,10 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import AppContext from "../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
 
 function Login() {
-  const { setUser, setToken, baseUrl, navigate } = useContext(AppContext);
+  const { pathname } = useLocation();
+  const { setUser, setToken, baseUrl, navigate, user } = useContext(AppContext);
   const [formState, setFormState] = useState("Login");
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -44,7 +46,7 @@ function Login() {
     if (success) {
       toast.success(message);
       localStorage.setItem("token", token);
-      localStorage.setItem("user", result);
+      localStorage.setItem("user", JSON.stringify(result));
       setToken(token);
       setUser(result);
       setTimeout(() => navigate('/'), 1000)
@@ -73,6 +75,17 @@ function Login() {
       clearForm();
     }
   }
+  
+
+  useEffect(() => {
+    function protectPath() {
+      if (user) {
+        navigate("/");
+      }
+    }
+    protectPath();
+    return () => {};
+  }, [pathname === "/login"]);
   return (
     <div className="grid place-items-center text-center mt-5">
       <div>
