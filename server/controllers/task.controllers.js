@@ -26,5 +26,12 @@ export const getTasks = asyncMiddleware( async (req, res) => {
 
 // GET TASK: /api/tasks/taskId
 export const getTask = asyncMiddleware( async (req, res) => {
+  const { userId } = req
+  const { taskId } = req.params
+  if(!taskId) return res.json({ success: false, statusCode: 400, message: 'Invalid Task ID'})
+  
+  const task = await TasksModel.findOne({_id: taskId, user: userId})
+  if(!task) return res.json({ success: false, statusCode: 400, message: 'Invalid Task ID'})
     
+    return res.json({ success: true, message:'Sucsess', task})
 })

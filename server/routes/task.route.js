@@ -8,7 +8,7 @@ taskRouter.post('/add', authUser, createTask)
 
 taskRouter.get('/', authUser, getTasks)
 
-taskRouter.get('/:taskId', getTask)
+taskRouter.get('/:taskId', authUser, getTask)
 
 
 export default taskRouter;

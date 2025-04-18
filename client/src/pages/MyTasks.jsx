@@ -56,7 +56,7 @@ function MyTasks() {
 
         <table className=" bg-white h-62 w-sm md:w-md lg:w-xl xl:w-full mx-auto mt-10 ">
           <thead>
-            <tr className="p-5">
+            <tr className="p-5 font-medium">
               <td className="p-4 ">SN</td>
               <td>TITLE</td>
               <td>START TIME</td>
@@ -71,7 +71,7 @@ function MyTasks() {
                   <td>{task.title}</td>
                   <td>{task.description}</td>
                   <td>{task.complete ? 'Yes' : 'No'}</td>
-                  <td onClick={() => navigate(`/my-task/${task.id}`)} className="text-green-500 cursor-pointer hover:bg-green-100">View </td>
+                  <td onClick={() => navigate(`/my-task/${task._id}`)} className="text-green-500 cursor-pointer hover:bg-green-100">View </td>
                 </tr>
               ))}
           </tbody>
