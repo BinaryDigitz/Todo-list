@@ -4,3 +4,4 @@
 
 /server/*.json
 /server/node_modules
+/server/*.local
