@@ -24,7 +24,8 @@ function App() {
           <Route path="/my-task" element={<MyTasks />} />
           <Route path="/my-task/:taskId" element={<ViewTasks />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/login" element={<IsLoggedIn />} />
+          <Route path="/is-logged-in" element={<IsLoggedIn />} />
+          <Route path="/login" element={<Login />} />
           
         </Routes>
       </main>

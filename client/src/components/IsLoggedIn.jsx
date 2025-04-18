@@ -8,7 +8,7 @@ function IsLoggedIn() {
 
   useEffect(() => {
     function handleAuth() {
-      if (pathname === "/login") {
+      if (pathname === "/is-logged-in") {
         const token = localStorage.getItem("token");
         if (token) {
             setToken(token)

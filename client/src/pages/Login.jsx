@@ -44,6 +44,7 @@ function Login() {
     if (success) {
       toast.success(message);
       localStorage.setItem("token", token);
+      localStorage.setItem("user", result);
       setToken(token);
       setUser(result);
       setTimeout(() => navigate('/'), 1000)

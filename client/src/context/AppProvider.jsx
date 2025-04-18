@@ -9,9 +9,17 @@ function AppProvider({ children}) {
     const [ user, setUser ] = useState(null)
     const [ token, setToken ] = useState(null)
     const [ tasks, setTasks ] = useState(null)
-
-    const values ={
+    
+    function logout(){
+      setToken(null)
+      setUser(null)
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      setTimeout( navigate('/is-logged-in', 1000))
+    }
+    const values = {
         baseUrl,
+        logout,
         navigate,
         user, setUser,
         token, setToken,
@@ -20,6 +28,8 @@ function AppProvider({ children}) {
     }
     useEffect(() =>{
       setTasks(todos)
+      setToken(localStorage.getItem('token'))
+      setUser(localStorage.getItem('user'))
     },[])
   return (
     <AppContext.Provider value={values}>
