@@ -14,7 +14,9 @@ function connectDB() {
       });
     })
     .catch((ex) => {
-      console.log("Failed to connect to database...", ex.message);
+      console.log("Failed to connect to database...");
+      console.log(ex.message);
+      
     });
 }
 
