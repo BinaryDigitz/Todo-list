@@ -1,10 +1,7 @@
 import mongoose from 'mongoose'
 
 const taskSchema = mongoose.Schema({
-    user:{
-
-     ref:user
-    },
+   
     title:{
         type:String,
         required: true,
@@ -28,4 +25,4 @@ const taskSchema = mongoose.Schema({
 
 const TasksModel = mongoose.model('Task', taskSchema)
 
-export default taskSchema
+export default TasksModel
