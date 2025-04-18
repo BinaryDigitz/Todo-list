@@ -156,7 +156,7 @@ function clearForm(){
             />
           </div>
           {formState === "Login" && (
-            <p className="text-indigo-800 text-sm my-0.5 cursor-pointer">
+            <p className="text-indigo-800 text-sm my-0.5 cursor-pointer text-left ">
               Forgot password
             </p>
           )}

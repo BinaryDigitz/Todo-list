@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import AppContext from "../context/AppContext";
 
 function MyTasks() {
-  const { tasks } = useContext(AppContext);
+  const { tasks, navigate } = useContext(AppContext);
   console.log(tasks);
 
   return (
@@ -33,7 +33,7 @@ function MyTasks() {
                   <td>{task.title}</td>
                   <td>{task.title}</td>
                   <td>{task.title}</td>
-                  <td className="text-green-500 cursor-pointer hover:bg-green-100">View </td>
+                  <td onClick={() => navigate(`/my-task/${task.id}`)} className="text-green-500 cursor-pointer hover:bg-green-100">View </td>
                 </tr>
               ))}
           </tbody>

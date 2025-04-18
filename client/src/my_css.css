@@ -1,9 +1,5 @@
 
-*,
-::before >*,
-::after >*{
-    box-sizing: border-box;
-}
+
 :root{
     /* LIGHT MODE AND MOBILE FIRST
     --primary-color:#000;
