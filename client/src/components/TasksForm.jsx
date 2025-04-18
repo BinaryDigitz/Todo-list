@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import AppContext from "../context/AppContext";
 
 function TasksForm() {
-   const {baseUrl, setTasks } = useContext(AppContext)
+   const {baseUrl, setTasks, resetApp } = useContext(AppContext)
   const [task, setTask] = useState({ title: "", description: "" });
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
@@ -12,19 +12,25 @@ function TasksForm() {
   const disableBTN = task.title.length < 6 || task.description.length < 6;
 
   async function handleFormSubmit(event) {
+    const token = localStorage.getItem('token')
     event.preventDefault();
     setLoading(true);
     setError("");
     try{
-        const { data } = await axios.post(baseUrl + '/api/tasks/add', task)
+        const { data } = await axios.post(baseUrl + '/api/tasks/add', task, 
+          { headers: {token}}
+        )
         const { success, message, tasks } = data
+       resetApp(message)
         if(success){
             setLoading(false)
             toast.success(message)
             setTasks(tasks)
             setTask({title:'', description:''})
+            return;
         }
         setError(message)
+        setLoading(false)
         setTask({title:'', description:''})
     }
     catch(ex){
