@@ -5,7 +5,7 @@ import { todos } from '../assets/assets'
 
 function AppProvider({ children}) {
     const navigate = useNavigate()
-    const baseUrl = ''
+    const baseUrl = 'http://localhost:4300'
     const [ user, setUser ] = useState(null)
     const [ token, setToken ] = useState(null)
     const [ tasks, setTasks ] = useState(null)

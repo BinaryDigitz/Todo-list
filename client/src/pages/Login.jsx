@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 function Login() {
-  const { setUser, setToken, baseUrl } = useContext(AppContext);
+  const { setUser, setToken, baseUrl, navigate } = useContext(AppContext);
   const [formState, setFormState] = useState("Login");
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -17,30 +17,41 @@ function Login() {
   const disableBTN = formData.email.length < 6 || formData.password.length < 6;
 
   function toggleFormState() {
-    clearForm()
+    clearForm();
     if (formState === "Login") {
       return setFormState("Sign Up");
     }
     return setFormState("Login");
   }
-function clearForm(){
+  function clearForm() {
     return setFormData({
-        name:'', email:'', password:''
-    })
-}
-  async function handlePostData(body, endpoint) {
-    const { data } = await axios.post(baseUrl + endpoint, body);
-    const { success, message, token, user } = data;
+      name: "",
+      email: "",
+      password: "",
+    });
+  }
+  function handleLoading(){
+    setLoading(false)
+    setError('')
+    clearForm()
+  }
+  async function handlePostData(body, endpoint, acceptCRED) {
+    const { data } = await axios.post(baseUrl + endpoint, body, {
+      withCredentials: acceptCRED,
+    });
+    const { success, message, token, result } = data;
 
     if (success) {
       toast.success(message);
       localStorage.setItem("token", token);
-      setToken("token");
-      setUser(user);
-      return;
+      setToken(token);
+      setUser(result);
+      setTimeout(() => navigate('/'), 1000)
+      return handleLoading()
     }
+    setLoading(false)
+    clearForm()
     setError(message);
-   
   }
 
   async function handleFormSubmit(event) {
@@ -48,20 +59,17 @@ function clearForm(){
     setError("");
     setLoading(true);
     try {
-      if (formData === "Login") {
-        const formDatas = new FormData();
-        formDatas.append("email", formData.email);
-        formDatas.append("email", formData.password);
-        await handlePostData(formDatas, '/api/auth/body');
+      if (formState === "Login") {
+        const newUser = { email: formData.email, password: formData.password}
+        await handlePostData(newUser, "/api/users/sign-in", true);
+        return;
       }
-      await handlePostData(formData, '/api/auth/sign-up')
-      setLoading(false);
-      clearForm()
 
+      await handlePostData(formData, "/api/users/sign-up", false);
     } catch (ex) {
-      setError(ex.message)
-      setLoading(false)
-      clearForm()
+      setError(ex.message);
+      setLoading(false);
+      clearForm();
     }
   }
   return (

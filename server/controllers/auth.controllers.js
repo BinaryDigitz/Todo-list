@@ -24,11 +24,28 @@ export const registerUser = asyncMiddleware ( async (req, res) =>{
     })
 
     const { password: pass, ...rest } = user._doc
-    return res.json({ success: true, message: 'User created successfully', data: rest, token })
+    return res.json({ success: true, message: 'User created successfully', result: rest, token })
 })
 
 // LOGIN USER: /api/users/login
 export const loginUser = asyncMiddleware ( async ( req, res) =>{
+    
+    
+    const { email, password } = req.body
+    const user = await UserModel.findOne({ email})
+    if(!user) return res.json({ success: false, message:'Invalid Email or Password', statusCode: 400})
+    
+    const isPasswordValid = await bcrypt.compare(password, user.password)
+    if(!isPasswordValid) return res.json({ success: false, message:'Invalid Email or Password', statusCode: 400})
+    
+    const token = await user.generateToken()
+    res.cookie('token', token, {
+        secure: NODE_ENV === 'production',
+        sameSite: NODE_ENV === 'production' ? 'none' : 'strict',
+        maxAge: 2 * 24 * 60 * 60 * 1000
+    })
+    const { password: pass, ...rest } = user._doc
+    return res.json({ success: true, message: 'Login successfully', result: rest, token })
 
 })
 
