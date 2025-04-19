@@ -4,6 +4,7 @@ import { JWT_SECRET } from "../config/env.js";
 async function authUser(req, res, next) {
   const { token } = req.headers;
 
+ console.log(token);
  
   if (!token)
     return res.json({

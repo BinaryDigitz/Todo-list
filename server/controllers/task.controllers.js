@@ -35,3 +35,30 @@ export const getTask = asyncMiddleware( async (req, res) => {
     
     return res.json({ success: true, message:'Sucsess', task})
 })
+
+// GET TASK: /api/tasks/taskId
+export const deleteTask = asyncMiddleware( async (req, res) => {
+  const { userId } = req
+  const { taskId } = req.params
+  if(!taskId) return res.json({ success: false, statusCode: 400, message: 'Invalid Task ID'})
+  
+  const task = await TasksModel.findByIdAndDelete({_id: taskId, user: userId})
+  if(!task) return res.json({ success: false, statusCode: 400, message: 'Invalid Task ID'})
+    const tasks = await TasksModel.find({user:userId })
+    
+    return res.json({ success: true, message:'Deleted successfully', tasks})
+})
+
+
+// UPDATE TASK: /api/tasks/update/taskId
+export const updateTask = asyncMiddleware( async (req, res) => {
+  const { userId } = req
+  const { taskId } = req.params
+  if(!taskId) return res.json({ success: false, statusCode: 400, message: 'Invalid Task ID'})
+  
+  const task = await TasksModel.findByIdAndUpdate({_id: taskId, user: userId}, { completed: true})
+  if(!task) return res.json({ success: false, statusCode: 400, message: 'Invalid Task ID'})
+    const tasks = await TasksModel.find({_id: taskId, user:userId })
+    
+    return res.json({ success: true, message:'Updated successfully', tasks})
+})

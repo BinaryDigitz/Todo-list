@@ -1,3 +1,5 @@
+import { CiTrash } from "react-icons/ci";
+import { FiEdit3, FiCheck } from "react-icons/fi";
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -6,47 +8,70 @@ import { Error, Loading } from "../components/exportComp";
 import { toast } from "react-toastify";
 
 function ViewTasks() {
-  const { baseUrl } = useContext(AppContext);
+  const { baseUrl, token, navigate } = useContext(AppContext);
   const [isLoading, setLoading] = useState(false);
-  const [error, setError] = useState({statusCode:'', message:''});
+  const [error, setError] = useState({ statusCode: "", message: "" });
   const [task, setTask] = useState(null);
   const { taskId } = useParams();
 
   //mark task as complete
- async function completeTask(){
-
- }
+  async function completeTask() {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(
+        baseUrl + `/api/tasks/update/${taskId}`,{ headers: { token }});
+      console.log(token);
+      
+      if (!data.success) {
+        setLoading(false);
+        setError({ statusCode: data.statusCode, message: data.message });
+        return;
+      }
+      toast.success(data.message);
+      setLoading(false);
+     fetchTask()
+    } catch (ex) {
+      setError({ statusCode: 400, message: ex.message });
+      setLoading(false);
+    }
+  }
 
   //Delete task
-async function deleteTask(){
-  setLoading(true)
- try{
-  const { data } = await axios.get(baseUrl + `/api/tasks/${taskId}`)
-  if(!data.success){
-    setLoading(false)
-    setError({statusCode: data.statusCode, message: data.message})
-    return;
+  async function deleteTask() {
+    setLoading(true);
+    try {
+      const { data } = await axios.get(
+        baseUrl + `/api/tasks/remove/${taskId}`,
+        {
+          headers: { token },
+        }
+      );
+      if (!data.success) {
+        setLoading(false);
+        setError({ statusCode: data.statusCode, message: data.message });
+        return;
+      }
+      toast.success(data.message);
+      setLoading(false);
+      navigate("/my-task");
+    } catch (ex) {
+      setError({ statusCode: 400, message: ex.message });
+      setLoading(false);
+    }
   }
-  toast.success(data.message)
-  setLoading(false)
- return fetchTask()
- }
- catch(ex){
-  setError({ statusCode: 400, message:ex.message})
-  setLoading(false)
- }
-}
 
   // fetch task
   async function fetchTask() {
-    const token = localStorage.getItem('token')
-    setError({statusCode:'', message:''});
+    const token = localStorage.getItem("token");
+    setError({ statusCode: "", message: "" });
     setLoading(true);
     try {
-      const { data } = await axios.get(baseUrl + `/api/tasks/${taskId}`, { headers: { token}});
+      const { data } = await axios.get(baseUrl + `/api/tasks/${taskId}`, {
+        headers: { token },
+      });
       const { success, statusCode, message, task } = data;
-      console.log(task.title);
-      
+     
+
       if (success) {
         toast.success(message);
         setTask(task);
@@ -54,35 +79,63 @@ async function deleteTask(){
         return;
       }
       setTask(null);
-      setError({statusCode, message: message});
+      setError({ statusCode, message: message });
       setLoading(false);
     } catch (ex) {
       setLoading(false);
-      setError({statusCode:'400', message:ex.message});
+      setError({ statusCode: "400", message: ex.message });
     }
   }
   useEffect(() => {
     fetchTask();
   }, []);
-  
-  if(!task){
-    return <Loading />
+
+  if (!task || isLoading) {
+    return <Loading />;
   }
-  if(error.message.length > 1){
-    return <Error error={error} />
+  if (error.message.length > 1) {
+    return <Error error={error} />;
   }
   return (
     <div>
       <div className="grid place-items-center ">
         <h1 className="heading3 text-center mt-5">Your TASK</h1>
         <div className="p-6 bg-white shadow-sm w-sm lg:w-lg rounded-sm mt-5">
-          <h3 className=" text-gray-700 flex gap-18">TITLE: <span className="text-black font-medium">{task.title}</span></h3>
-          <p className=" text-gray-700 flex gap-4 my-5" >DESCRIPTION: <span className="text-black">{task.description}</span></p>
-          <p className=" text-gray-700 flex gap-4">COMPLETED: <span className={`${task.complete ? 'text-green-500' : 'text-red-500'} font-medium`}>{task.complete ? 'Yes' : 'No'}</span></p>
+          <h3 className=" text-gray-700 flex gap-18">
+            TITLE: <span className="text-black font-medium">{task.title}</span>
+          </h3>
+          <p className=" text-gray-700 flex gap-4 my-5">
+            DESCRIPTION: <span className="text-black">{task.description}</span>
+          </p>
+          <p className=" text-gray-700 flex gap-4">
+            COMPLETED:{" "}
+            <span
+              className={`${
+                task.completed ? "text-green-500" : "text-red-500"
+              } font-medium`}
+            >
+              {task.completed ? "Yes" : "No"}
+            </span>
+          </p>
           <div className="flex justify-around items-center my-5 mt-10">
-            <button className="bg-gray-400 px-5 py-1.5 rounded shadow hover:bg-gray-300 cursor-pointer">Edit task</button>
-            <button className="bg-green-400 px-5 py-1.5 rounded shadow hover:bg-green-300 text-green-950  cursor-pointer">Mark as complete</button>
-            <button className="bg-red-400 px-5 py-1.5 rounded shadow hover:bg-red-300 text-red-950 cursor-pointer">Delete task</button>
+            <button className="bg-gray-400 px-5 py-1.5 rounded shadow hover:bg-gray-300 cursor-pointer flex items-center gap-1">
+              <FiEdit3 />
+              Edit task
+            </button>
+            <button
+              onClick={completeTask}
+              className="bg-green-400 px-5 py-1.5 rounded shadow hover:bg-green-300 text-green-950  cursor-pointer flex items-center gap-1"
+            >
+              <FiCheck />
+              Mark as complete
+            </button>
+            <button
+              onClick={deleteTask}
+              className="bg-red-400 px-5 py-1.5 rounded shadow hover:bg-red-300 text-red-950 cursor-pointer flex items-center gap-1"
+            >
+              <CiTrash fontWeight={600} />
+              Delete task
+            </button>
           </div>
         </div>
       </div>
