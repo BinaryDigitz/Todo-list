@@ -73,7 +73,6 @@ function ViewTasks() {
      
 
       if (success) {
-        toast.success(message);
         setTask(task);
         setLoading(false);
         return;
@@ -90,12 +89,14 @@ function ViewTasks() {
     fetchTask();
   }, []);
 
+ 
   if (!task || isLoading) {
     return <Loading />;
   }
   if (error.message.length > 1) {
     return <Error error={error} />;
   }
+ 
   return (
     <div>
       <div className="grid place-items-center ">
@@ -118,18 +119,22 @@ function ViewTasks() {
             </span>
           </p>
           <div className="flex justify-around items-center my-5 mt-10">
-            <button className="bg-gray-400 px-5 py-1.5 rounded shadow hover:bg-gray-300 cursor-pointer flex items-center gap-1">
+            <button 
+            disabled={ task && task.completed}
+            className="bg-gray-400 px-5 py-1.5 rounded shadow disabled:opacity-50 hover:bg-gray-300 cursor-pointer flex items-center gap-1">
               <FiEdit3 />
               Edit task
             </button>
             <button
+            disabled={ task && task.completed}
               onClick={completeTask}
-              className="bg-green-400 px-5 py-1.5 rounded shadow hover:bg-green-300 text-green-950  cursor-pointer flex items-center gap-1"
+              className="bg-green-400 px-5 py-1.5 rounded shadow  disabled:opacity-50 text-green-950 hover:bg-green-300  cursor-pointer flex items-center gap-1"
             >
               <FiCheck />
               Mark as complete
             </button>
             <button
+            
               onClick={deleteTask}
               className="bg-red-400 px-5 py-1.5 rounded shadow hover:bg-red-300 text-red-950 cursor-pointer flex items-center gap-1"
             >
